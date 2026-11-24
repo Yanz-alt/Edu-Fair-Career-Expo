@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Khusus Admin — Edu Fair & Career Expo 2026 SMKN 6 Tangsel</title>
+  
+  <!-- Keamanan: Larang Mesin Pencari Mengindeks Halaman Rahasia Ini -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#101C25">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23A3BBC4'%3E%3Cpath d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z'/%3E%3C/svg%3E">
+
+  <!-- Stylesheet Custom -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- CDN Supabase JS v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-body">
+  <!-- Container Notifikasi Toast -->
+  <div id="toast-container"></div>
+
+  <!-- =========================================================================
+       1. PASSWORD GATE SCREEN (LAYAR KUNCI ADMIN)
+       ========================================================================= -->
+  <div class="password-gate-screen" id="password-gate-screen">
+    <div class="password-gate-card">
+      <div class="admin-lock-icon">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <h2 style="color: #FFFFFF; font-size: 1.45rem; margin-bottom: 6px;">Portal Khusus Panitia</h2>
+      <p style="color: #94A3B8; font-size: 0.85rem; margin-bottom: 24px;">
+        Edu Fair &amp; Career Expo 2026 &bull; SMKN 6 Kota Tangerang Selatan
+      </p>
+
+      <form id="admin-login-form">
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="admin-password-input" style="color: #E2E8F0;">
+            Kata Sandi Akses Administrator:
+          </label>
+          <input 
+            type="password" 
+            id="admin-password-input" 
+            class="form-input" 
+            placeholder="Masukkan kata sandi admin..." 
+            autocomplete="current-password"
+            required
+            style="background: #0B132B; color: #FFFFFF; border-color: rgba(255,255,255,0.2);">
+        </div>
+        <button type="submit" id="btn-login-admin" class="btn btn-gold btn-block">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          <span>Masuk ke Dashboard</span>
+        </button>
+      </form>
+      <div id="login-error-msg" style="color: #EF4444; font-size: 0.85rem; margin-top: 14px; display: none;">
+        Kata sandi salah. Silakan periksa kembali kredensial Anda.
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. DASHBOARD UTAMA MANAJEMEN ADMIN (SETELAH LOGIN)
+       ========================================================================= -->
+  <div id="admin-dashboard-container" style="display: none; padding-bottom: 60px;">
+    <!-- Topbar Admin -->
+    <header class="admin-navbar">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="cover-badge-nemtas">PANITIA NEMTAS 2026</span>
+        <div class="admin-nav-title">Manajemen Undangan &amp; RSVP</div>
+      </div>
+      <div class="admin-nav-actions">
+        <span id="supabase-status-badge" style="font-size: 0.75rem; padding: 4px 10px; border-radius: 999px; background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981;">
+          Supabase Connected
+        </span>
+        <button type="button" id="btn-admin-logout" class="btn btn-outline btn-sm" style="color: #F8FAFC; border-color: rgba(255,255,255,0.2);">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="container" style="margin-top: 24px;">
+      <!-- Kartu-Kartu Statistik Ringkasan -->
+      <div class="stat-card-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Total Tamu</div>
+          <div class="stat-card-value" id="stat-total-guests">0</div>
+          <div class="stat-card-sub">Data Buku Tamu</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Link Dibuka</div>
+          <div class="stat-card-value" id="stat-opened" style="color: #38BDF8;">0</div>
+          <div class="stat-card-sub">Tamu Sudah Akses</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Konfirmasi Hadir</div>
+          <div class="stat-card-value" id="stat-hadir" style="color: #10B981;">0</div>
+          <div class="stat-card-sub">Hadir Langsung</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Perwakilan Hadir</div>
+          <div class="stat-card-value" id="stat-perwakilan" style="color: #F59E0B;">0</div>
+          <div class="stat-card-sub">Diwakilkan Staf</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Tidak Hadir</div>
+          <div class="stat-card-value" id="stat-tidak-hadir" style="color: #EF4444;">0</div>
+          <div class="stat-card-sub">Berhalangan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Belum Konfirmasi</div>
+          <div class="stat-card-value" id="stat-pending" style="color: #94A3B8;">0</div>
+          <div class="stat-card-sub">Menunggu Jawaban</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Estimasi Pax Hadir</div>
+          <div class="stat-card-value" id="stat-total-pax" style="color: #FBBF24;">0</div>
+          <div class="stat-card-sub">Total Orang Hadir</div>
+        </div>
+      </div>
+
+      <!-- Bilah Kontrol & Filter -->
+      <div class="admin-controls-card">
+        <div class="admin-search-row">
+          <input 
+            type="text" 
+            id="admin-search-input" 
+            class="admin-search-input" 
+            placeholder="🔍 Cari nama tamu, instansi, atau PIC...">
+
+          <select id="admin-filter-category" class="admin-filter-select">
+            <option value="ALL">Semua Kategori</option>
+            <option value="Universitas">Universitas</option>
+            <option value="Industri">Industri</option>
+            <option value="Sponsorship">Sponsorship</option>
+            <option value="Alumni">Alumni</option>
+            <option value="Tamu">Tamu Umum / Instansi</option>
+          </select>
+
+          <select id="admin-filter-rsvp" class="admin-filter-select">
+            <option value="ALL">Semua Status RSVP</option>
+            <option value="Hadir">Hadir Langsung</option>
+            <option value="Perwakilan Hadir">Perwakilan Hadir</option>
+            <option value="Tidak Hadir">Tidak Hadir</option>
+            <option value="Belum Konfirmasi">Belum Konfirmasi</option>
+          </select>
+        </div>
+
+        <div class="admin-action-row">
+          <button type="button" id="btn-open-modal-add" class="btn btn-gold btn-sm">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Tambah Tamu Baru</span>
+          </button>
+
+          <!-- Input File Tersembunyi untuk Import CSV -->
+          <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
+          <button type="button" id="btn-trigger-import-csv" class="btn btn-outline btn-sm" style="color:#fff; border-color: rgba(255,255,255,0.2);">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Import CSV Tamu</span>
+          </button>
+
+          <button type="button" id="btn-export-csv" class="btn btn-emerald btn-sm">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Export Rekap CSV</span>
+          </button>
+
+          <button type="button" id="btn-refresh-data" class="btn btn-outline btn-sm" style="color:#94A3B8; border-color: rgba(255,255,255,0.15);">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span>Muat Ulang</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabel Daftar Tamu -->
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="admin-guest-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">ID</th>
+              <th>Nama Tamu &amp; Instansi</th>
+              <th>Kategori</th>
+              <th>No. WhatsApp</th>
+              <th>Status RSVP</th>
+              <th>Pax</th>
+              <th>Dibuka</th>
+              <th style="text-align: center; width: 220px;">Aksi Cepat</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 40px; color: #94A3B8;">
+                Memuat data tamu...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: TAMBAH TAMU BARU
+       ========================================================================= -->
+  <div class="admin-modal-backdrop" id="modal-add-guest">
+    <div class="admin-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Tambah Tamu Undangan Baru</h3>
+        <button type="button" class="btn-close-modal" data-close="modal-add-guest" style="background: none; color: #fff; font-size: 1.5rem;">&times;</button>
+      </div>
+      <form id="form-add-guest">
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Nama Tamu / Pejabat</label>
+          <input type="text" id="add-nama-tamu" class="form-input" placeholder="Contoh: Dr. H. Ahmad Fauzi (Opsional)">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Nama Instansi / Perusahaan / Kampus <span style="color:#EF4444;">*</span></label>
+          <input type="text" id="add-instansi" class="form-input" required placeholder="Contoh: Universitas Multimedia Nusantara">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Kategori Undangan <span style="color:#EF4444;">*</span></label>
+          <select id="add-kategori" class="form-select" required>
+            <option value="Universitas">Universitas</option>
+            <option value="Industri">Industri</option>
+            <option value="Sponsorship">Sponsorship</option>
+            <option value="Alumni">Alumni</option>
+            <option value="Tamu" selected>Tamu Umum / Instansi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Nomor WhatsApp</label>
+          <input type="text" id="add-whatsapp" class="form-input" placeholder="Contoh: 08123456789 atau 628123456789">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Penanggung Jawab (PJ)</label>
+          <input type="text" id="add-pj" class="form-input" placeholder="Contoh: Pak Setiawan / Bu Yuni">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px;">
+          <button type="button" class="btn btn-outline btn-close-modal" data-close="modal-add-guest" style="color: #fff;">Batal</button>
+          <button type="submit" class="btn btn-gold">Simpan Tamu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: EDIT TAMU
+       ========================================================================= -->
+  <div class="admin-modal-backdrop" id="modal-edit-guest">
+    <div class="admin-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Data Tamu &amp; WhatsApp</h3>
+        <button type="button" class="btn-close-modal" data-close="modal-edit-guest" style="background: none; color: #fff; font-size: 1.5rem;">&times;</button>
+      </div>
+      <form id="form-edit-guest">
+        <input type="hidden" id="edit-guest-id">
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Nama Tamu</label>
+          <input type="text" id="edit-nama-tamu" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Nama Instansi <span style="color:#EF4444;">*</span></label>
+          <input type="text" id="edit-instansi" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Kategori Undangan</label>
+          <select id="edit-kategori" class="form-select">
+            <option value="Universitas">Universitas</option>
+            <option value="Industri">Industri</option>
+            <option value="Sponsorship">Sponsorship</option>
+            <option value="Alumni">Alumni</option>
+            <option value="Tamu">Tamu</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">
+            Nomor WhatsApp 
+            <small style="color: #94A3B8;">(Format Indonesia: 628... / 08...)</small>
+          </label>
+          <input type="text" id="edit-whatsapp" class="form-input" placeholder="Contoh: 081280890067">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Status Kehadiran (RSVP)</label>
+          <select id="edit-rsvp-status" class="form-select">
+            <option value="Belum Konfirmasi">Belum Konfirmasi</option>
+            <option value="Hadir">Hadir</option>
+            <option value="Perwakilan Hadir">Perwakilan Hadir</option>
+            <option value="Tidak Hadir">Tidak Hadir</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Jumlah Hadir (Pax)</label>
+          <input type="number" id="edit-jumlah-hadir" class="form-input" min="1" max="50" value="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Nama Perwakilan (Jika Diwakilkan)</label>
+          <input type="text" id="edit-nama-perwakilan" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #fff;">Ucapan / Doa</label>
+          <textarea id="edit-ucapan" class="form-textarea" rows="2"></textarea>
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px;">
+          <button type="button" class="btn btn-outline btn-close-modal" data-close="modal-edit-guest" style="color: #fff;">Batal</button>
+          <button type="submit" class="btn btn-gold">Perbarui Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script Konfigurasi Supabase CDN -->
+  <script src="assets/js/supabase-config.js"></script>
+
+  <!-- Script Logika Admin Panel (admin.js) -->
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

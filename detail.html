@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Detail Undangan — Edu Fair & Career Expo 2026 · SMKN 6 Kota Tangerang Selatan</title>
+  <meta name="description" content="Jadwal lengkap, peta lokasi, rundown, RSVP & Live Attendance Wall Edu Fair dan Career Expo 2026 SMKN 6 Tangsel.">
+  <meta name="theme-color" content="#101C25">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23A3BBC4'%3E%3Cpath d='M12 3L1 9l11 6 9-4.91V17h2V9L12 3z'/%3E%3Cpath d='M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- ============================================================================
+     LAYOUT SPLIT-SCREEN
+     - left-pane  : STICKY di desktop ≥ 1024px (countdown, info tamu, kalender)
+     - right-feed : scrollable feed card-by-card, full-width di mobile
+     ============================================================================ -->
+<div class="detail-layout">
+
+  <!-- ================================================================
+       KOLOM KIRI STICKY (Desktop only)
+       ================================================================ -->
+  <aside class="left-pane" id="left-pane">
+
+    <div class="left-pane-brand">
+      <div class="left-pane-event-badge">Official Invitation 2026</div>
+      <h2 class="left-pane-title">
+        <span class="accent">Edu Fair</span> &amp;<br>Career Expo
+      </h2>
+      <p class="left-pane-theme">
+        &ldquo;Connecting Competence to Future:<br>Bekerja, Melanjutkan, Berwirausaha&rdquo;
+      </p>
+    </div>
+
+    <!-- Countdown Real-Time -->
+    <div class="left-pane-countdown">
+      <div class="countdown-heading-left">Menuju Hari Pembukaan</div>
+      <div class="countdown-grid-left" id="cd-grid-left">
+        <div class="countdown-cell">
+          <div class="countdown-num" id="cd-left-days">00</div>
+          <div class="countdown-label">Hari</div>
+        </div>
+        <div class="countdown-cell">
+          <div class="countdown-num" id="cd-left-hours">00</div>
+          <div class="countdown-label">Jam</div>
+        </div>
+        <div class="countdown-cell">
+          <div class="countdown-num" id="cd-left-minutes">00</div>
+          <div class="countdown-label">Menit</div>
+        </div>
+        <div class="countdown-cell">
+          <div class="countdown-num" id="cd-left-seconds">00</div>
+          <div class="countdown-label">Detik</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tombol Kalender (di Kolom Kiri Desktop) -->
+    <div class="left-pane-cal-btns">
+      <a id="btn-gcal-left" href="#" target="_blank" rel="noopener" class="btn btn-glass" style="font-size:0.88rem; padding:11px 18px;">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+        </svg>
+        Simpan ke Google Calendar
+      </a>
+      <button type="button" id="btn-ics-left" class="btn btn-gold" style="font-size:0.88rem; padding:11px 18px;">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Unduh File Kalender (.ics)
+      </button>
+    </div>
+
+    <!-- Info Tamu di Kolom Kiri -->
+    <div class="left-pane-guest-box" id="left-pane-guest-box" style="display:none;">
+      <div class="left-pane-guest-label">Kepada Yth.</div>
+      <div class="left-pane-guest-name" id="left-pane-guest-name">—</div>
+      <div class="left-pane-guest-instansi" id="left-pane-guest-instansi">SMKN 6 Kota Tangerang Selatan</div>
+    </div>
+
+  </aside>
+
+  <!-- ================================================================
+       KOLOM KANAN / MOBILE FEED (Scrollable Content)
+       ================================================================ -->
+  <div class="right-feed">
+
+    <!-- Mobile Nav (tersembunyi di desktop) -->
+    <nav class="mobile-top-nav">
+      <div class="mobile-nav-brand">
+        <span style="color: var(--slate-300);">🎓</span> Edu Fair &amp; Career Expo 2026
+      </div>
+      <div class="mobile-nav-links">
+        <a href="#card-rundown" class="mobile-nav-link">Rundown</a>
+        <a href="#card-lokasi" class="mobile-nav-link">Lokasi</a>
+        <a href="#card-rsvp" class="mobile-nav-link" style="color:var(--slate-100); font-weight:700;">RSVP</a>
+      </div>
+    </nav>
+
+    <div class="feed-inner">
+
+      <!-- ============================================================
+           CARD 1: HERO EVENT — Intro & Identitas Acara
+           ============================================================ -->
+      <div class="feed-card reveal" id="card-hero">
+        <div class="card-top-badge"><span>Undangan Resmi Kegiatan Tahunan</span></div>
+        <div class="dome-frame">
+          <img src="assets/img/galeri-1.jpg"
+               alt="Edu Fair & Career Expo 2026 SMKN 6 Tangsel"
+               onerror="window.renderFallbackSvg(this,'Edu Fair 2026','#203746')">
+        </div>
+        <h1 class="card-title">Edu Fair &amp; Career Expo 2026</h1>
+        <p class="card-subtitle">&ldquo;Connecting Competence to Future: Bekerja, Melanjutkan, Berwirausaha&rdquo;</p>
+
+        <div class="flourish-row" style="margin:16px 0;">
+          <div class="flourish-line"></div>
+          <div class="flourish-diamond"></div>
+          <div class="flourish-dot"></div>
+          <div class="flourish-diamond"></div>
+          <div class="flourish-line r"></div>
+        </div>
+
+        <!-- Meta Acara Ringkasan -->
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:0.9rem; color:var(--color-muted);">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="width:34px;height:34px;border-radius:50%;background:var(--slate-100);border:1px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--slate-800)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </span>
+            <div><strong style="color:var(--slate-800);">Rabu, 25 November 2026</strong><br><span style="color:var(--color-muted);font-size:0.82rem;">Pukul 07.00 – 14.20 WIB</span></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="width:34px;height:34px;border-radius:50%;background:var(--slate-100);border:1px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--slate-800)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </span>
+            <div><strong style="color:var(--slate-800);">SMKN 6 Kota Tangerang Selatan</strong><br><span style="color:var(--color-muted);font-size:0.82rem;">Jl. Magnolia VI No. 6, Jelupang, Serpong Utara</span></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="width:34px;height:34px;border-radius:50%;background:var(--slate-100);border:1px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--slate-800)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </span>
+            <div><strong style="color:var(--slate-800);">07.00 – 14.20 WIB</strong><br><span style="color:var(--color-muted);font-size:0.82rem;">Rabu, 25 November 2026</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CARD 2: COUNTDOWN + KALENDER (Mobile Only)
+           ============================================================ -->
+      <div class="feed-card reveal mobile-only" id="card-countdown-mobile">
+        <div class="card-top-badge"><span>Hitung Mundur Menuju Acara</span></div>
+        <div class="countdown-feed-wrap">
+          <div class="countdown-feed-heading">Waktu Tersisa Hingga Pembukaan</div>
+          <div class="countdown-grid">
+            <div class="countdown-box">
+              <div class="countdown-num" id="cd-days">00</div>
+              <div class="countdown-label">Hari</div>
+            </div>
+            <div class="countdown-box">
+              <div class="countdown-num" id="cd-hours">00</div>
+              <div class="countdown-label">Jam</div>
+            </div>
+            <div class="countdown-box">
+              <div class="countdown-num" id="cd-minutes">00</div>
+              <div class="countdown-label">Menit</div>
+            </div>
+            <div class="countdown-box">
+              <div class="countdown-num" id="cd-seconds">00</div>
+              <div class="countdown-label">Detik</div>
+            </div>
+          </div>
+        </div>
+        <div class="cal-action-row">
+          <a id="btn-gcal" href="#" target="_blank" rel="noopener" class="btn btn-outline" style="flex:1; font-size:0.84rem;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            Google Calendar
+          </a>
+          <button type="button" id="btn-ics" class="btn btn-gold btn-sm" style="flex:1; font-size:0.84rem;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Unduh .ICS
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CARD 3: DUA PILAR ACARA (Pengganti Groom & Bride)
+           ============================================================ -->
+      <div class="feed-card reveal" id="card-pillars">
+        <div class="card-top-badge"><span>Dua Zona Utama Kegiatan</span></div>
+
+        <div class="pillars-wrap">
+          <div class="pillar-block">
+            <div class="pillar-icon-circle">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
+            <div class="pillar-title">🎓 Zona Edu Fair</div>
+            <div class="pillar-desc">30+ Universitas & Politeknik Terbaik, Konseling Beasiswa, Sharing Session Nasional</div>
+            <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px;justify-content:center;">
+              <span class="badge badge-universitas">Kampus Negeri</span>
+              <span class="badge badge-universitas">Kampus Swasta</span>
+              <span class="badge badge-tamu">Beasiswa</span>
+            </div>
+          </div>
+
+          <div class="pillar-ampersand-wrap">&amp;</div>
+
+          <div class="pillar-block">
+            <div class="pillar-icon-circle">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
+              </svg>
+            </div>
+            <div class="pillar-title">💼 Zona Career Expo</div>
+            <div class="pillar-desc">Pameran Industri, Rekrutmen Langsung, Sharing Session Dunia Kerja Digital</div>
+            <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px;justify-content:center;">
+              <span class="badge badge-industri">Industri</span>
+              <span class="badge badge-sponsorship">Sponsor</span>
+              <span class="badge badge-alumni">Alumni</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CARD 4: RUNDOWN INTERAKTIF (Save The Date + Timeline)
+           ============================================================ -->
+      <div class="feed-card reveal" id="card-rundown">
+        <div class="card-top-badge"><span>Susunan Jadwal Kegiatan</span></div>
+        <h2 class="card-title" style="font-size:1.3rem;">Rundown Acara Interaktif</h2>
+
+        <!-- Calendar Banner Besar -->
+        <div class="calendar-banner">
+          <div class="cal-day-name">RABU</div>
+          <div class="cal-day-num">25</div>
+          <div class="cal-month-year">NOVEMBER 2026</div>
+          <div class="cal-time-loc">
+            <span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              07.00 – 14.20 WIB
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              SMKN 6 Tangsel
+            </span>
+          </div>
+        </div>
+
+        <!-- Tab Navigasi Sesi -->
+        <div class="rundown-tabs" id="rundown-tabs">
+          <button type="button" class="tab-btn is-active" data-sid="sesi-1">Sesi 1</button>
+          <button type="button" class="tab-btn" data-sid="sesi-2-indoor">Indoor (09.00–13.00)</button>
+          <button type="button" class="tab-btn" data-sid="sesi-2-outdoor">Outdoor (09.00–13.00)</button>
+          <button type="button" class="tab-btn" data-sid="sesi-3">Sesi 3 &amp; Hari Guru</button>
+        </div>
+
+        <!-- Venue Badge -->
+        <div style="text-align:center;">
+          <span class="venue-pill" id="venue-pill">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span id="venue-text">Area Utama / Lapangan Upacara</span>
+          </span>
+        </div>
+
+        <!-- Timeline Container -->
+        <div class="timeline-list" id="timeline-container"></div>
+      </div>
+
+      <!-- ============================================================
+           CARD 5: LOKASI AKURAT SMKN 6 TANGSEL + COPY TOAST
+           ============================================================ -->
+      <div class="feed-card reveal" id="card-lokasi">
+        <div class="card-top-badge"><span>Arah &amp; Navigasi Lokasi</span></div>
+        <h2 class="card-title" style="font-size:1.3rem;">Lokasi Acara Resmi</h2>
+        <p class="card-subtitle">Jl. Magnolia VI No. 6, Kel. Jelupang, Kec. Serpong Utara, Kota Tangerang Selatan 15323</p>
+
+        <!-- Google Maps Iframe Akurat (-6.263100, 106.666100) -->
+        <div class="map-wrapper">
+          <iframe
+            src="https://maps.google.com/maps?q=-6.263100,106.666100&z=16&output=embed"
+            title="Peta Lokasi SMKN 6 Kota Tangerang Selatan"
+            loading="lazy"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="map-action-row">
+          <a href="https://www.google.com/maps/search/?api=1&query=-6.263100,106.666100"
+             target="_blank" rel="noopener" class="btn btn-ocean btn-sm" style="flex:1;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+            Petunjuk Arah
+          </a>
+          <button type="button" id="btn-copy-address" class="btn btn-outline btn-sm" style="flex:1;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+            Salin Alamat
+          </button>
+          <button type="button" id="btn-copy-contact" class="btn btn-outline btn-sm" style="flex:1;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 12.63a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
+            Salin Kontak
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CARD 6: GALERI FOTO (Grid 2 Kolom + Lightbox)
+           ============================================================ -->
+      <div class="feed-card reveal" id="card-galeri">
+        <div class="card-top-badge"><span>Dokumentasi &amp; Galeri</span></div>
+        <h2 class="card-title" style="font-size:1.3rem;">Galeri Kegiatan Sekolah</h2>
+        <p class="card-subtitle">Potret semangat vokasi dan kolaborasi di SMKN 6 Kota Tangerang Selatan</p>
+
+        <div class="gallery-grid" id="gallery-grid">
+          <div class="gallery-item" data-src="assets/img/galeri-1.jpg" data-cap="Pameran Inovasi & Booth Kampus">
+            <img src="assets/img/galeri-1.jpg" alt="Pameran Inovasi" onerror="window.renderFallbackSvg(this,'Pameran Inovasi','#0284C7')">
+            <div class="gallery-overlay"><div class="gallery-caption">Pameran Inovasi &amp; Kampus</div></div>
+          </div>
+          <div class="gallery-item" data-src="assets/img/galeri-2.jpg" data-cap="Sharing Session Industri & Karier">
+            <img src="assets/img/galeri-2.jpg" alt="Sharing Session" onerror="window.renderFallbackSvg(this,'Sharing Session','#1D4ED8')">
+            <div class="gallery-overlay"><div class="gallery-caption">Sharing Session Industri</div></div>
+          </div>
+          <div class="gallery-item" data-src="assets/img/galeri-3.jpg" data-cap="Pentas Seni & Peringatan Hari Guru">
+            <img src="assets/img/galeri-3.jpg" alt="Pentas Seni" onerror="window.renderFallbackSvg(this,'Pentas Seni Siswa','#F59E0B')">
+            <div class="gallery-overlay"><div class="gallery-caption">Pentas Seni &amp; Hari Guru</div></div>
+          </div>
+          <div class="gallery-item" data-src="assets/img/galeri-4.jpg" data-cap="Kunjungan Mitra & Rekrutmen">
+            <img src="assets/img/galeri-4.jpg" alt="Kunjungan Mitra" onerror="window.renderFallbackSvg(this,'Kunjungan Mitra','#8B5CF6')">
+            <div class="gallery-overlay"><div class="gallery-caption">Kunjungan Mitra Industri</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CARD 7: RSVP — AUTO-FILLED FORM + TIKET KONFIRMASI
+           ============================================================ -->
+      <div class="feed-card reveal" id="card-rsvp">
+        <div class="card-top-badge"><span>Konfirmasi Kehadiran (RSVP)</span></div>
+        <h2 class="card-title" style="font-size:1.3rem;">Formulir RSVP Tamu</h2>
+        <p class="card-subtitle">Mohon konfirmasikan kehadiran Bapak/Ibu untuk kelancaran penyambutan tamu.</p>
+
+        <div class="rsvp-box">
+          <!-- Header Identitas Tamu Terverifikasi -->
+          <div class="rsvp-guest-header">
+            <div class="rsvp-verified-tag">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Tamu Terverifikasi
+            </div>
+            <div id="rsvp-header-name" style="font-weight:700;font-size:1.15rem;color:var(--slate-100);margin-bottom:2px;">Memuat Data…</div>
+            <div id="rsvp-header-instansi" style="color:var(--slate-300);font-size:0.88rem;">SMKN 6 Kota Tangerang Selatan</div>
+          </div>
+
+          <!-- Tiket Konfirmasi (muncul setelah submit) -->
+          <div class="ticket-card" id="confirmed-ticket" style="display:none;">
+            <div class="ticket-header">
+              <div>
+                <div style="font-size:0.7rem;color:var(--slate-700);font-weight:700;text-transform:uppercase;">Bukti Konfirmasi Kehadiran</div>
+                <div style="font-weight:800;font-size:1.02rem;color:var(--slate-800);" id="ticket-name">—</div>
+              </div>
+              <span class="ticket-status-badge" id="ticket-status">HADIR</span>
+            </div>
+            <div class="ticket-grid">
+              <div><div class="ticket-field-label">Instansi</div><div class="ticket-field-value" id="ticket-inst">—</div></div>
+              <div><div class="ticket-field-label">Jumlah</div><div class="ticket-field-value" id="ticket-pax">—</div></div>
+              <div id="ticket-rep-row" style="display:none;"><div class="ticket-field-label">Perwakilan</div><div class="ticket-field-value" id="ticket-rep">—</div></div>
+              <div><div class="ticket-field-label">Dikonfirmasi</div><div class="ticket-field-value" id="ticket-ts" style="font-size:0.82rem;">—</div></div>
+            </div>
+            <div id="ticket-ucapan-wrap" style="background:#FFFFFF;border-left:3px solid var(--slate-700);border-radius:6px;padding:10px 12px;font-style:italic;font-size:0.86rem;color:var(--slate-900);margin-bottom:14px;border:1px solid var(--slate-300);border-left-width:3px;">
+              &ldquo;<span id="ticket-ucapan">—</span>&rdquo;
+            </div>
+            <button type="button" id="btn-edit-rsvp" class="btn btn-outline btn-block">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              Ubah Pilihan Kehadiran
+            </button>
+          </div>
+
+          <!-- Form RSVP -->
+          <form id="rsvp-form">
+            <input type="hidden" id="rsvp-guest-id">
+            <input type="hidden" id="rsvp-token">
+
+            <div class="form-group">
+              <label class="form-label" for="inp-name">Nama Tamu / Penerima Undangan</label>
+              <input type="text" id="inp-name" class="form-input" readonly required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inp-inst">Instansi / Kampus / Perusahaan</label>
+              <input type="text" id="inp-inst" class="form-input" readonly required>
+            </div>
+
+            <!-- Segmented Radio: Status Kehadiran -->
+            <div class="form-group">
+              <label class="form-label">Status Kehadiran <span style="color:#EF4444">*</span></label>
+              <div class="rsvp-status-grid">
+                <label class="rsvp-status-card is-selected" id="card-hadir">
+                  <input type="radio" name="status" value="Hadir" checked>
+                  <span class="rsvp-status-emoji">✅</span>
+                  <div class="rsvp-status-label">Hadir</div>
+                  <div class="rsvp-status-desc">Langsung di lokasi</div>
+                </label>
+                <label class="rsvp-status-card" id="card-perwakilan">
+                  <input type="radio" name="status" value="Perwakilan Hadir">
+                  <span class="rsvp-status-emoji">🤝</span>
+                  <div class="rsvp-status-label">Perwakilan</div>
+                  <div class="rsvp-status-desc">Diwakilkan staf</div>
+                </label>
+                <label class="rsvp-status-card" id="card-tidak-hadir">
+                  <input type="radio" name="status" value="Tidak Hadir">
+                  <span class="rsvp-status-emoji">❌</span>
+                  <div class="rsvp-status-label">Tidak Hadir</div>
+                  <div class="rsvp-status-desc">Berhalangan</div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Input Perwakilan (Kondisional) -->
+            <div class="form-group" id="group-perwakilan" style="display:none;">
+              <label class="form-label" for="inp-rep">Nama Perwakilan / Utusan <span style="color:#EF4444">*</span></label>
+              <input type="text" id="inp-rep" class="form-input" placeholder="Contoh: Bpk. Kurniawan / Ibu Ratna">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sel-pax">Jumlah Rombongan (Orang)</label>
+              <select id="sel-pax" class="form-select">
+                <option value="1">1 Orang</option>
+                <option value="2">2 Orang</option>
+                <option value="3">3 Orang</option>
+                <option value="4">4 Orang</option>
+                <option value="5">5 Orang</option>
+                <option value="6">6 Orang</option>
+                <option value="7">7 Orang</option>
+                <option value="8">8 Orang</option>
+                <option value="9">9 Orang</option>
+                <option value="10">10 Orang</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inp-ucapan">Ucapan Selamat &amp; Harapan untuk SMKN 6 Tangsel</label>
+              <textarea id="inp-ucapan" class="form-textarea" rows="3" placeholder="Tuliskan ucapan selamat atau harapan terbaik Anda…"></textarea>
+            </div>
+
+            <button type="submit" id="btn-rsvp-submit" class="btn btn-ocean btn-lg btn-block">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span id="rsvp-btn-text">Kirim Konfirmasi Kehadiran</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CARD 8: LIVE SHARED ATTENDANCE WALL (Supabase Realtime)
+           ============================================================ -->
+      <div class="feed-card reveal" id="card-wall">
+        <div class="wall-live-header">
+          <div>
+            <div style="font-family:var(--font-cinzel);font-size:0.7rem;letter-spacing:1.5px;color:var(--slate-700);font-weight:700;text-transform:uppercase;margin-bottom:4px;">Buku Tamu Digital</div>
+            <h3 style="font-size:1.15rem;color:var(--slate-800);font-weight:800;margin-bottom:0;">Live Attendance Wall</h3>
+          </div>
+          <div class="wall-live-badge">
+            <span class="pulse-dot"></span>
+            LIVE REALTIME
+          </div>
+        </div>
+        <div id="wall-container">
+          <div style="text-align:center;padding:32px 0;color:var(--color-muted);">⏳ Memuat daftar kehadiran…</div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="text-align:center;padding:28px 16px;color:var(--color-muted);font-size:0.82rem;">
+        <div style="font-weight:700;color:var(--slate-800);margin-bottom:4px;">Edu Fair &amp; Career Expo 2026</div>
+        <div style="margin-bottom:8px;">SMK Negeri 6 Kota Tangerang Selatan</div>
+        <div style="font-size:0.75rem;">&copy; 2026 SMKN 6 Kota Tangerang Selatan. Hak cipta dilindungi.</div>
+      </div>
+
+    </div><!-- /feed-inner -->
+  </div><!-- /right-feed -->
+
+</div><!-- /detail-layout -->
+
+<!-- Lightbox Modal -->
+<div class="lightbox-modal" id="lightbox-modal">
+  <div class="lightbox-inner">
+    <button type="button" class="lightbox-close" id="lb-close">&times;</button>
+    <img class="lightbox-img" id="lb-img" src="" alt="">
+    <div class="lightbox-caption" id="lb-caption"></div>
+  </div>
+</div>
+
+<!-- Helper: Fallback SVG untuk foto galeri yang belum ada -->
+<script>
+  window.renderFallbackSvg = function(el, label, color) {
+    if (el.dataset.fb) return;
+    el.dataset.fb = '1';
+    const c = color || '#203746';
+    const s = encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450"><rect width="600" height="450" fill="#101C25"/><rect x="0" y="0" width="600" height="4" fill="${c}"/><circle cx="300" cy="195" r="80" fill="${c}" opacity="0.25"/><text x="300" y="340" fill="#E1EAEB" font-family="sans-serif" font-size="22" font-weight="bold" text-anchor="middle">${label}</text><text x="300" y="375" fill="#A3BBC4" font-family="sans-serif" font-size="13" text-anchor="middle">SMKN 6 Kota Tangerang Selatan</text></svg>`);
+    el.src = 'data:image/svg+xml;charset=utf-8,' + s;
+  };
+</script>
+
+<!-- Scripts -->
+<script src="assets/js/supabase-config.js"></script>
+<script src="assets/js/rundown-data.js"></script>
+<script src="assets/js/audio-player.js"></script>
+<script src="assets/js/detail.js"></script>
+</body>
+</html>
